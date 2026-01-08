@@ -4,11 +4,13 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from app.routers import books
 from app.database import Base, engine
+from prometheus_fastapi_instrumentator import Instrumentator
 import os
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="LibraryLite")
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
 BASE_DIR = Path(__file__).resolve().parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
