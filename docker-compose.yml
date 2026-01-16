@@ -18,6 +18,10 @@ services:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
+    volumes:
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ./grafana/wykres.json:/etc/grafana/provisioning/dashboards/wykres.json
 
 volumes:
   db_data:
