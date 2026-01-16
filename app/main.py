@@ -19,6 +19,9 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 app.include_router(books.router)
 
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
 
 @app.on_event("startup")
 async def startup_event():
