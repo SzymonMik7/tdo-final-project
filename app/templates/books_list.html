@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Books (UI)</h2>
+
+<p>
+  <a href="/ui">UI Home</a> |
+  <a href="/books/">Books JSON</a> |
+  <a href="/docs">Swagger</a>
+</p>
+
+<hr>
+
+<h3>Add book</h3>
+
+<form id="createForm">
+  <p>
+    <label>Title</label><br>
+    <input name="title" required>
+  </p>
+  <p>
+    <label>Author</label><br>
+    <input name="author" required>
+  </p>
+  <p>
+    <label>Description</label><br>
+    <textarea name="description" rows="3"></textarea>
+  </p>
+  <p>
+    <label>Year</label><br>
+    <input name="year" type="number">
+  </p>
+  <button type="submit">Create</button>
+</form>
+
+<p id="createMsg"></p>
+
+<hr>
+
+<h3>List</h3>
+
+{% if books|length == 0 %}
+  <p>No books in database.</p>
+{% else %}
+  <table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Year</th>
+      <th>Actions</th>
+    </tr>
+    {% for b in books %}
+    <tr>
+      <td>{{ b.id }}</td>
+      <td>{{ b.title }}</td>
+      <td>{{ b.author }}</td>
+      <td>{{ b.year if b.year is not none else "" }}</td>
+      <td>
+        <a href="/ui/books/{{ b.id }}">View</a> |
+        <a href="/ui/books/{{ b.id }}/edit">Edit</a> |
+        <form method="post" action="/books/{{ b.id }}/delete" style="display:inline;">
+          <button type="submit" onclick="return confirm('Delete book #{{ b.id }}?');">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endif %}
+
+<script>  const form = document.getElementById("createForm");
+  const msg = document.getElementById("createMsg");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.textContent = "";
+
+    const fd = new FormData(form);
+    const payload = {
+      title: (fd.get("title") || "").toString(),
+      author: (fd.get("author") || "").toString(),
+      description: (fd.get("description") || "").toString() || null,
+      year: fd.get("year") ? Number(fd.get("year")) : null,
+    };
+
+    const res = await fetch("/books/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      msg.textContent = "Create failed (check required fields).";
+      return;
+    }
+
+
+    window.location.reload();
+  });
+</script>
+
+{% endblock %}
