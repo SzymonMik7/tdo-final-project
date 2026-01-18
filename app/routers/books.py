@@ -3,8 +3,13 @@ from sqlalchemy.orm import Session
 
 from app import models, schemas
 from app.database import SessionLocal
+from prometheus_client import Counter
 
 router = APIRouter(prefix="/books")
+BOOKS_ADDED_TOTAL = Counter(
+    'library_books_added_total', 
+    'Całkowita liczba dodanych książek do biblioteki'
+)
 
 def get_db():
     db = SessionLocal()
@@ -35,6 +40,9 @@ def create_book(book: schemas.BookCreate, db: Session = Depends(get_db)):
     )
     db.add(obj)
     db.commit()
+
+    BOOKS_ADDED_TOTAL.inc()
+    
     db.refresh(obj)
     return obj
 

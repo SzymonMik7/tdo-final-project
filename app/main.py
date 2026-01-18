@@ -12,6 +12,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="LibraryLite")
 Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
+
 BASE_DIR = Path(__file__).resolve().parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 static_dir = os.path.join(BASE_DIR, "static")
