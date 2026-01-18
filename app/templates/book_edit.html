@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Edit book #{{ book.id }}</h2>
+
+<p><a href="/ui/books/{{ book.id }}">Back</a> | <a href="/ui/books">List</a></p>
+
+<form method="post" action="/books/{{ book.id }}/edit">
+  <p>
+    <label>Title</label><br>
+    <input name="title" value="{{ book.title }}" required>
+  </p>
+  <p>
+    <label>Author</label><br>
+    <input name="author" value="{{ book.author }}" required>
+  </p>
+  <p>
+    <label>Description</label><br>
+    <textarea name="description" rows="3">{{ book.description if book.description else "" }}</textarea>
+  </p>
+  <p>
+    <label>Year</label><br>
+    <input name="year" type="number" value="{{ book.year if book.year is not none else '' }}">
+  </p>
+  <button type="submit">Save</button>
+</form>
+
+<form method="post" action="/books/{{ book.id }}/delete" style="margin-top:10px;">
+  <button type="submit" onclick="return confirm('Delete book #{{ book.id }}?');">Delete</button>
+</form>
+
+{% endblock %}
