@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Book #{{ book.id }}</h2>
+
+<p><a href="/ui/books">Back to list</a></p>
+
+<ul>
+  <li><b>Title:</b> {{ book.title }}</li>
+  <li><b>Author:</b> {{ book.author }}</li>
+  <li><b>Description:</b> {{ book.description if book.description else "" }}</li>
+  <li><b>Year:</b> {{ book.year if book.year is not none else "" }}</li>
+</ul>
+
+<p>
+  <a href="/ui/books/{{ book.id }}/edit">Edit</a>
+</p>
+
+<form method="post" action="/books/{{ book.id }}/delete">
+  <button type="submit" onclick="return confirm('Delete book #{{ book.id }}?');">Delete</button>
+</form>
+
+<hr>
+<p>
+  API:
+  <a href="/books/{{ book.id }}">/books/{{ book.id }}</a>
+</p>
+{% endblock %}
