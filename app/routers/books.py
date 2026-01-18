@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Form
 from sqlalchemy.orm import Session
 
 from app import models, schemas
@@ -63,10 +63,21 @@ def update_book(book_id: int, book: schemas.BookCreate, db: Session = Depends(ge
 
 @router.post("/{book_id}/edit", response_model=schemas.Book)
 def update_book_via_form(
-    book_id: int, 
-    book: schemas.BookCreate, 
-    db: Session = Depends(get_db)):
-    return update_book(book_id, book, db)
+    book_id: int,
+    title: str = Form(...),
+    author: str = Form(...),
+    description: str | None = Form(None),
+    year: int | None = Form(None),
+    db: Session = Depends(get_db),
+):
+    book_data = schemas.BookCreate(
+        title=title,
+        author=author,
+        description=description,
+        year=year,
+    )
+    return update_book(book_id, book_data, db)
+
 
 
 
