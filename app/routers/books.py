@@ -54,7 +54,10 @@ def update_book(book_id: int, book: schemas.BookCreate, db: Session = Depends(ge
     return db_book
 
 @router.post("/{book_id}/edit", response_model=schemas.Book)
-def update_book_via_form(book_id: int, book: schemas.BookCreate, db: Session = Depends(get_db)):
+def update_book_via_form(
+    book_id: int, 
+    book: schemas.BookCreate, 
+    db: Session = Depends(get_db)):
     return update_book(book_id, book, db)
 
 
