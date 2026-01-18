@@ -53,6 +53,14 @@ def update_book(book_id: int, book: schemas.BookCreate, db: Session = Depends(ge
     db.refresh(db_book)
     return db_book
 
+@router.post("/{book_id}/edit", response_model=schemas.Book)
+def update_book_via_form(
+    book_id: int, 
+    book: schemas.BookCreate, 
+    db: Session = Depends(get_db)):
+    return update_book(book_id, book, db)
+
+
 
 @router.delete("/{book_id}")
 def delete_book(book_id: int, db: Session = Depends(get_db)):
@@ -62,3 +70,8 @@ def delete_book(book_id: int, db: Session = Depends(get_db)):
     db.delete(db_book)
     db.commit()
     return {"message": "Book deleted"}
+
+@router.post("/{book_id}/delete")
+def delete_book_via_form(book_id: int, db: Session = Depends(get_db)):
+    return delete_book(book_id, db)
+
