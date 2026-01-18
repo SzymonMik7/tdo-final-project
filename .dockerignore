@@ -11,5 +11,3 @@ env.example
 __pycache__/
 *.pyc
 venv/
-*.log
-tests/
