@@ -134,3 +134,34 @@ W Compose aplikacja działa z:
 - `DATABASE_URL=sqlite:////data/app.db`,
 - wolumenem `db_data` pod `/data`.
 
+---
+
+## Monitoring i Obserwacje
+
+System monitoringu oparty na stosie **Prometheus** i **Grafana**, skonfigurowany jako **Provisioning** (automatyczne wdrożenie konfiguracji przy starcie z plików .yaml i .json).
+
+### Metryki i Dashboard
+| Wykres | Metryka | Opis |
+| :--- | :--- | :--- |
+| **Suma książek** | `BOOKS_ADDED_TOTAL` | Licznik (**Counter**) pomyślnych zapisów w bazie danych. |
+| **Zasoby** | `container_cpu/memory` | Zużycie CPU i RAM przez kontener aplikacji. |
+| **Ruch HTTP** | `http_requests_total` | Natężenie ruchu. |
+
+### Alerty (Alerting Rules)
+* **App Down**: Powiadomienie o braku sygnału `up` z aplikacji (awaria kontenera).
+* **High Load**: Alert przy obciążeniu > 30 req/min (obliczany z okna 30s).
+
+### Test wydajnościowy (Stress Test)
+Aby przetestować działanie alertu **High Load**, uruchom w terminalu hosta:
+```bash
+for i in {1..150}; do curl -s http://localhost:8000/ > /dev/null; sleep 0.05; done
+```
+
+### Informacje dostępowe
+
+| Usługa | Adres URL | Autoryzacja |
+| :--- | :--- | :--- |
+| **Grafana** | [http://localhost:3000](http://localhost:3000) | `admin` / `admin` |
+| **Prometheus** | [http://localhost:9090](http://localhost:9090) | Dostęp otwarty |
+
+---
