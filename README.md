@@ -165,3 +165,103 @@ for i in {1..150}; do curl -s http://localhost:8000/ > /dev/null; sleep 0.05; do
 | **Prometheus** | [http://localhost:9090](http://localhost:9090) | Dostęp otwarty |
 
 ---
+
+## 🏗 DevOps, CI/CD & Quality Assurance
+
+Sekcja poświęcona procesom zapewnienia jakości (QA), automatyzacji wdrożeń oraz strategii wersjonowania, za które odpowiada zespół DevOps (Osoba 3).
+
+### 1. Konfiguracja Środowiska Deweloperskiego
+
+Aby zapewnić izolację zależności i powtarzalność testów, pracujemy w wirtualnym środowisku Python.
+
+**Tworzenie i aktywacja środowiska:**
+
+```bash
+# 1. Utwórz wirtualne środowisko (venv)
+python -m venv venv
+
+# 2. Aktywuj środowisko:
+# Windows (Git Bash):
+source venv/Scripts/activate
+# Windows (PowerShell):
+# .\venv\Scripts\activate
+# Linux/macOS:
+# source venv/bin/activate
+
+```
+
+**Instalacja zależności:**
+Gdy środowisko jest aktywne (widoczny prefiks `(venv)`), zainstaluj pakiety:
+
+```bash
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+
+```
+
+### 2. Weryfikacja kodu (QA)
+
+Projekt wykorzystuje narzędzia do statycznej analizy oraz testów automatycznych w celu utrzymania wysokiej jakości kodu.
+
+| Polecenie | Narzędzie | Opis |
+| --- | --- | --- |
+| `ruff check .` | **Ruff** | Linter kodu. Sprawdza zgodność ze standardami PEP8, importy i wykrywa błędy składniowe. |
+| `python -m pytest` | **Pytest** | Uruchamia pełny zestaw testów automatycznych. |
+
+**Zakres testów (`tests/`):**
+
+* **Smoke Tests:** Szybka weryfikacja czy moduły aplikacji importują się poprawnie.
+* **Integration Tests:**
+* `GET /health` – sprawdzenie statusu aplikacji (Liveness Probe).
+* `GET /metrics` – weryfikacja, czy endpoint metryk Prometheusa jest dostępny.
+* `POST/GET /books/` – testy scenariuszowe CRUD weryfikujące zapis i odczyt danych z bazy.
+
+
+
+### 3. Automatyzacja CI/CD (GitHub Actions)
+
+W katalogu `.github/workflows/` zdefiniowano automatyczne potoki:
+
+* **CI (Continuous Integration):** Uruchamiane przy każdym *Push* i *Pull Request*. Wykonuje linter oraz testy. Blokuje możliwość zmerge'owania kodu, który nie przechodzi weryfikacji.
+* **CD (Continuous Delivery):** Uruchamiane **wyłącznie** po otagowaniu commita (np. `v1.0.0`). Buduje obraz Docker i publikuje go w rejestrze **GitHub Container Registry (GHCR)**.
+
+### 4. Strategia Wersjonowania
+
+W projekcie wdrożono rygorystyczną politykę **Immutable Tags** (niezmiennych tagów), aby zagwarantować stabilność środowisk produkcyjnych.
+
+**Obrazy Aplikacji (GHCR):**
+
+1. ❌ **Brak tagu `latest`:** Nie używamy tagu `latest` w rejestrze zdalnym, aby uniknąć niekontrolowanych aktualizacji.
+2. ✅ **Semantic Versioning:** Obrazy otrzymują tag zgodny z tagiem w git (np. `v1.0.0`, `v1.1.0`).
+3. ✅ **Commit SHA:** Każdy obraz posiada dodatkowy tag z hashem commita (np. `sha-4f2a1b`) dla pełnej śnialności (traceability).
+
+**Infrastruktura (`docker-compose.yml`):**
+Obrazy usług zewnętrznych są "przypięte" do konkretnych wersji:
+
+* `prom/prometheus:v2.45.0` (zamiast latest)
+* `grafana/grafana:10.2.0` (zamiast latest)
+
+### 🚀 Release Guide: Jak wydać nową wersję?
+
+Aby zbudować i opublikować nową wersję aplikacji w GHCR:
+
+1. Upewnij się, że gałąź `main` jest aktualna i testy przechodzą lokalnie.
+2. Utwórz tag wersji (zgodnie z SemVer):
+```bash
+git tag v1.0.0
+
+```
+
+
+3. Wyślij tag do repozytorium (automatycznie uruchomi to pipeline CD):
+```bash
+git push origin v1.0.0
+
+```
+
+
+4. Po zakończeniu procesu w zakładce *Actions*, gotowy obraz pojawi się w sekcji **Packages** repozytorium.
+
+```
+
+```
