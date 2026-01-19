@@ -263,5 +263,3 @@ git push origin v1.0.0
 4. Po zakończeniu procesu w zakładce *Actions*, gotowy obraz pojawi się w sekcji **Packages** repozytorium.
 
 ```
-
-```
