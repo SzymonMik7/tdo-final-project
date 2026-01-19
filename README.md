@@ -166,9 +166,9 @@ for i in {1..150}; do curl -s http://localhost:8000/ > /dev/null; sleep 0.05; do
 
 ---
 
-## 🏗 DevOps, CI/CD & Quality Assurance
+## DevOps, CI/CD & Quality Assurance
 
-Sekcja poświęcona procesom zapewnienia jakości (QA), automatyzacji wdrożeń oraz strategii wersjonowania, za które odpowiada zespół DevOps (Osoba 3).
+Sekcja poświęcona procesom zapewnienia jakości (QA), automatyzacji wdrożeń oraz strategii wersjonowania, za które odpowiada zespół DevOps.
 
 ### 1. Konfiguracja Środowiska Deweloperskiego
 
@@ -231,9 +231,9 @@ W projekcie wdrożono rygorystyczną politykę **Immutable Tags** (niezmiennych 
 
 **Obrazy Aplikacji (GHCR):**
 
-1. ❌ **Brak tagu `latest`:** Nie używamy tagu `latest` w rejestrze zdalnym, aby uniknąć niekontrolowanych aktualizacji.
-2. ✅ **Semantic Versioning:** Obrazy otrzymują tag zgodny z tagiem w git (np. `v1.0.0`, `v1.1.0`).
-3. ✅ **Commit SHA:** Każdy obraz posiada dodatkowy tag z hashem commita (np. `sha-4f2a1b`) dla pełnej śnialności (traceability).
+1. **Brak tagu `latest`:** Nie używamy tagu `latest` w rejestrze zdalnym, aby uniknąć niekontrolowanych aktualizacji.
+2. **Semantic Versioning:** Obrazy otrzymują tag zgodny z tagiem w git (np. `v1.0.0`, `v1.1.0`).
+3. **Commit SHA:** Każdy obraz posiada dodatkowy tag z hashem commita (np. `sha-4f2a1b`) dla pełnej śnialności (traceability).
 
 **Infrastruktura (`docker-compose.yml`):**
 Obrazy usług zewnętrznych są "przypięte" do konkretnych wersji:
@@ -241,7 +241,7 @@ Obrazy usług zewnętrznych są "przypięte" do konkretnych wersji:
 * `prom/prometheus:v2.45.0` (zamiast latest)
 * `grafana/grafana:10.2.0` (zamiast latest)
 
-### 🚀 Release Guide: Jak wydać nową wersję?
+### Release Guide: Jak wydać nową wersję?
 
 Aby zbudować i opublikować nową wersję aplikacji w GHCR:
 
