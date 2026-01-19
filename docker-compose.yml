@@ -22,6 +22,7 @@ services:
         - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
         - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yaml
         - ./grafana/charts.json:/etc/grafana/provisioning/dashboards/wykres.json
+        - ./grafana/alerting.yml:/etc/grafana/provisioning/alerting/alerting.yaml
 
 volumes:
   db_data:
