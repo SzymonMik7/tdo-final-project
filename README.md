@@ -17,6 +17,7 @@ Projekt realizuje wymagania:
 - Aplikacja (strona główna): `http://localhost:8000/`
 - UI (książki): `http://localhost:8000/ui/books`
 - API (książki): `http://localhost:8000/books/`
+- Health Check: `http://localhost:8000/health`
 - Dokumentacja Swagger: `http://localhost:8000/docs`
 - Prometheus: `http://localhost:9090/`
 - Grafana: `http://localhost:3000/`
